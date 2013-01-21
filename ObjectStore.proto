@@ -1,0 +1,64 @@
+option java_package = "pl.nask.hsn2.protobuff";
+import "Object.proto";
+
+message ObjectRequest {
+  enum RequestType {
+    GET     = 0; // `object' filled
+    PUT     = 1; // `data' and/orNot `task_id' filled
+    UPDATE  = 2; // `data' filled
+    QUERY   = 3; // `query' filled
+    PUT_RAW = 4; // import
+  }
+  required RequestType type = 1;
+  required uint64 job = 2;
+  repeated uint64 objects = 3 [packed=true]; // for GET only
+  repeated ObjectData data = 4;              // for PUT and UPDATE
+  optional uint32 task_id = 5;               // for PUT only
+  optional bool overwrite = 6;               // for UPDATE only
+
+  message QueryStructure {
+    enum QueryType {
+      BY_ATTR_NAME  = 1;
+      BY_ATTR_VALUE = 2;
+      // this may be extended in the future
+    }
+    required QueryType type = 1;
+    // only a single one of the following fields can be used
+    optional string attr_name = 2;      // when type = BY_ATTR_NAME
+    optional Attribute attr_value = 3;  // when type = BY_ATTR_VALUE
+    optional bool negate = 4; // default is false
+  }
+  repeated QueryStructure query = 7;         // for QUERY only
+}
+
+message ObjectResponse { // TODO: change to ObjectReply for consistency
+  enum ResponseType {
+    SUCCESS_GET     = 0;   // request succeeded; `data' filled
+    SUCCESS_PUT     = 1;   // request succeeded; `objects' filled
+    SUCCESS_UPDATE  = 2;   // request succeeded; `conflicts' filled
+    SUCCESS_QUERY   = 3;   // request succeeded; `objects' filled
+    FAILURE         = 100; // request failed; `error' filled
+    PARTIAL_GET     = 101; // retrieved some objects; `missing' and
+                           //   `data' filled
+    PARTIAL_UPDATE  = 102; // updated some objects; `missing' and
+                           //   `conflicts' filled
+  }
+  required ResponseType type = 1;
+  repeated ObjectData data = 2;               // GET: results
+  repeated uint64 objects = 3 [packed=true];  // QUERY/PUT: results
+  repeated uint64 missing = 4 [packed=true];  // MISSING_*: not found IDs
+  repeated uint64 conflicts = 5 [packed=true]; // UPDATE: objects with
+                                               //   overlapping attributes
+  optional string error = 6;
+}
+
+message ObjectAdded {
+  required uint64 job = 1;     // copied from request
+  repeated uint64 objects = 2; // IDs of just added objects
+  required uint32 task_id = 3; // copied from request
+}
+
+message ObjectProcessed {
+}
+
+// vim: ft=cpp ts=2 sw=2 expandtab

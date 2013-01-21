@@ -1,0 +1,11 @@
+// vim: ft=cpp ts=2 sw=2 expandtab
+option java_package = "pl.nask.hsn2.protobuff";
+
+message FrameworkRequest {
+  enum ReqType {
+    RESTART     = 1;
+    RELOAD      = 2;
+  }
+  required ReqType type = 1;
+}
+

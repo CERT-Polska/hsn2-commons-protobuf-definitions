@@ -1,0 +1,74 @@
+option java_package = "pl.nask.hsn2.protobuff";
+
+message WorkflowRevisionInfo {
+  required string revision = 1;
+  required fixed64 mtime = 2;
+}
+
+message WorkflowBasicInfo {
+  required string name = 1;
+  required bool enabled = 2;
+}
+
+message WorkflowListRequest {
+  optional bool enabled_only = 1; // returns all by default
+}
+
+message WorkflowListReply {
+  repeated WorkflowBasicInfo workflows = 1;
+}
+
+message WorkflowStatusRequest {
+  required string name = 1;
+  optional string revision = 2;
+}
+
+message WorkflowStatusReply {
+  required bool valid = 1;
+  required bool enabled = 2;
+  required WorkflowRevisionInfo info = 3;
+  optional string description = 4;
+}
+
+message WorkflowGetRequest {
+  required string name = 1;
+  optional string revision = 2;
+}
+
+message WorkflowGetReply {
+  required string content = 1;
+  required string revision = 2;
+}
+
+message WorkflowPolicyRequest {
+  required string name = 1;
+  required bool enabled = 2;
+}
+
+message WorkflowPolicyReply {
+  required bool previous = 1;
+}
+
+message WorkflowUploadRequest {
+  required string name = 1;
+  required string content = 2;
+  required bool overwrite = 3;
+}
+
+message WorkflowUploadReply {
+  required string revision = 1;
+}
+
+message WorkflowHistoryRequest {
+  required string name = 1;
+}
+
+message WorkflowHistoryReply {
+  repeated WorkflowRevisionInfo history = 1;
+}
+
+message WorkflowError {
+  required string reason = 1;
+}
+
+// vim: ft=cpp ts=2 sw=2 expandtab

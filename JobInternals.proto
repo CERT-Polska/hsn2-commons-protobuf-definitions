@@ -1,0 +1,36 @@
+option java_package = "pl.nask.hsn2.protobuff";
+
+// This is a debugging/monitoring interface for the framework
+
+message ActiveThread {
+  required uint64 thread = 1; // unique id of the thread of control
+  optional uint64 parent = 2; // id of the parent thread of control
+  required uint64 object = 3; // id of the current object
+  required string process_name = 4;   // process name
+  enum ThreadState {
+    PENDING     = 1;
+    SERVICE     = 2;
+    FINISHED    = 3;
+    WAITING     = 4;
+    EVALUATING  = 5;
+  }
+  required ThreadState state = 5;     // current state of the thread
+  optional string service_name = 6;   // service name, if state == SERVICE
+  optional string service_label = 7;  // service label, if defined && state == SERVICE
+}
+
+message ThreadsRequest {
+  required uint64 job = 1;
+  // TODO: add query parameters
+}
+
+message ThreadsReply {
+  repeated ActiveThread threads = 1;
+  optional uint64 root = 2;
+}
+
+message ThreadsError {
+  required string error = 1; // error description in a human-readable form
+}
+
+// vim: ft=cpp ts=2 sw=2 expandtab

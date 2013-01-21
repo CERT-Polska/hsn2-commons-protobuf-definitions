@@ -1,0 +1,24 @@
+option java_package = "pl.nask.hsn2.protobuff";
+
+message Property {
+  required string name = 1;
+  required string value = 2;
+}
+
+message GetConfigRequest {
+}
+
+message GetConfigReply {
+  repeated Property properties = 1;
+}
+
+message SetConfigRequest {
+  required bool replace = 1 [default = false]; // should we remove the old config?
+  repeated Property properties = 2;
+}
+
+message SetConfigReply {
+  required bool success = 1;
+}
+
+// vim: ft=cpp ts=2 sw=2 expandtab

@@ -1,0 +1,40 @@
+option java_package = "pl.nask.hsn2.protobuff";
+import "Object.proto";
+import "Service.proto";
+
+message TaskRequest {
+  required fixed32 task_id = 1;
+  repeated Parameter parameters = 2;
+  required uint64 job = 3;          // current job
+  required uint64 object = 4;       // input object to fetch
+}
+
+message TaskAccepted {
+  required fixed32 task_id = 1;
+  required uint64 job = 2;
+}
+
+message TaskError {
+  required fixed32 task_id = 1;
+  required uint64 job = 2;
+
+  enum ReasonType {
+    DEFUNCT     = 0;  // permanent instance failure
+    OBJ_STORE   = 1;  // instance could not connect to Object Store
+    DATA_STORE  = 2;  // instance could not connect to Data Store
+    PARAMS      = 3;  // service parameters incomplete or incorrect
+    RESOURCE    = 4;  // required external resource is unavailable
+    INPUT       = 5;  // incorrect input data, e.g. missing attribute, wrong format
+  }
+  required ReasonType reason = 3;
+  optional string description = 4;  // error details
+}
+
+message TaskCompleted {
+  required fixed32 task_id = 1;
+  required uint64 job = 2;
+  repeated string warnings = 3; // used for non-fatal service errors
+  repeated uint64 objects = 4; // new objects added to the object store
+}
+
+// vim: ft=cpp ts=2 sw=2 expandtab

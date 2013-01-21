@@ -1,0 +1,27 @@
+option java_package = "pl.nask.hsn2.protobuff";
+import "Object.proto";
+
+message DataRequest {
+  enum RequestType {
+    GET = 0;
+    PUT = 1;
+  }
+  required RequestType type = 1;
+  required uint64 job = 2;
+  optional uint64 ref = 3;  // for `get' only
+  optional bytes data = 4;  // for `put' only
+}
+
+message DataResponse {
+  enum ResponseType {
+    ERROR = 0;
+    OK    = 1;
+    DATA  = 2;
+  }
+  required ResponseType type = 1;
+  optional Reference ref = 2; // retured after successful put
+  optional bytes data = 3;    // returned after successful get
+  optional string error = 4;
+}
+
+// vim: ft=cpp ts=2 sw=2 expandtab

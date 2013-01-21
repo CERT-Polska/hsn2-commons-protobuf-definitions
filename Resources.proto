@@ -1,0 +1,143 @@
+option java_package = "pl.nask.hsn2.protobuff";
+message JSContextList {
+  repeated JSContext contexts = 1;
+}
+
+message JSContext {
+  required uint32 id = 1;
+  required string source = 2;
+  required bool eval = 3;
+}
+
+message DnsQueries {
+  repeated string dns = 1;
+}
+
+import "Object.proto"; // contains definition of Reference
+message File {
+  repeated Request requests  = 1;
+  required string type       = 2;
+  required Reference content = 3;
+  optional uint64 object     = 4;
+}
+
+message FileList {
+  repeated File files = 1;
+}
+
+message Request {
+  required string request_url_original = 1;
+  required string request_url_absolute = 2;
+  optional string request_header       = 3;
+  optional uint32 response_code        = 4;
+  optional string response_header      = 5;
+}
+
+message FailedList {
+  repeated FailedRequest failed = 1;
+}
+
+message FailedRequest {
+  repeated Request requests = 1;
+  required string reason = 2;
+}
+
+message CookieList {
+  repeated Cookie cookies = 1;
+}
+
+message Cookie {
+  message Attribute {
+    required string name = 1;
+    optional string value = 2;
+  }
+  required string name = 1;
+  required string value = 2;
+  repeated Attribute attributes = 3;
+}
+
+message CveList {
+  repeated string cve = 1;
+}
+
+message ShellcodeOffsets {
+  repeated uint64 offsets = 1;
+}
+
+message ShellcodeASMs {
+  repeated string ASMs = 1;
+}
+
+message ScdbgResultList {
+  repeated ScdbgResult results = 1;
+}
+
+message ScdbgResult {
+  required uint32 offset = 1;
+  optional string output = 2;
+  optional Reference dump = 3;
+  optional Reference graph = 4;
+}  
+
+message JSStaticResults {
+  repeated JSContextResults results = 1;
+}
+
+message JSContextResults {
+  enum JSClass {
+    MALICIOUS = 1;
+    OBFUSCATED = 2;
+    BENIGN = 3;
+    UNCLASSIFIED = 4;
+  }
+  required uint32 id = 1;
+  required JSClass classification = 2;
+  repeated string malicious_keywords = 3;
+  repeated string suspicious_keywords = 4;
+  required bool whitelisted = 5;
+}
+
+message BehaviorsList {
+  repeated Behavior behavior = 1;
+}
+
+message Behavior {
+  required string description_text = 1;
+  optional string discovery_method = 2;
+}
+
+message YaraMatchesList {
+  repeated YaraMatch matches = 1;
+}
+
+message YaraMatch {
+  required string rule = 1;
+  optional string namespace = 2;
+}
+
+message ProtocolEntries {
+  repeated string frame = 1;
+}
+
+message IpAddresses {
+  repeated string ip = 1;
+}
+
+    message IpAdresses {
+  repeated string ip = 1;
+}
+
+message DomainVerdicts {
+  repeated DomainVerdict verdict = 1;
+}
+
+message DomainVerdict {
+  required string checked_domain = 1;
+  repeated SingleCheckerVerdict checked = 2;
+}
+
+message SingleCheckerVerdict {
+  required string name = 1;
+  required string verdict = 2;
+}
+

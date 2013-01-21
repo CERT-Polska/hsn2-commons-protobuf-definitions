@@ -1,0 +1,36 @@
+option java_package = "pl.nask.hsn2.protobuff";
+
+message Reference {
+  required uint64 key = 1;    // identifies entry within a particular store
+  optional uint32 store = 2;  // data store id (for multi-store setups); see task #5197
+}
+
+message Attribute {
+  enum Type {     // all types of attributes:
+    EMPTY   = 0;  // 'flags'
+    BOOL    = 1;  // boolean
+    INT     = 2;  // signed integer
+    TIME    = 3;  // seconds since epoch
+    FLOAT   = 4;  // single-precision floating point number
+    STRING  = 5;  // short text
+    OBJECT  = 6;  // object ID
+    BYTES   = 7;  // either raw file data or a protobuf message
+  }
+  required string name          = 1;
+  required Type type            = 2;
+  // only a single entry from the following list can be present
+  optional bool data_bool       = 3;  // BOOL
+  optional int32 data_int       = 4;  // INT
+  optional fixed64 data_time    = 5;  // TIME
+  optional float data_float     = 6;  // FLOAT
+  optional string data_string   = 7;  // STRING
+  optional uint64 data_object   = 8;  // OBJECT
+  optional Reference data_bytes = 9;  // BYTES: always stored externally
+}
+
+message ObjectData {
+  repeated Attribute attrs = 1; // contents
+  optional uint64 id = 3;       // reference in the object store
+}
+
+// vim: ft=cpp ts=2 sw=2 expandtab

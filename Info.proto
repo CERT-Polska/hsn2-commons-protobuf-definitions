@@ -1,0 +1,28 @@
+option java_package = "pl.nask.hsn2.protobuff";
+import "Object.proto";
+
+enum InfoType {
+  SYSTEM    = 0;
+  JOB       = 1;
+  COMPONENT = 2;
+}
+
+message InfoRequest {
+  required InfoType type = 1;
+  optional uint64 id = 2;
+}
+
+message InfoData {
+  required InfoType type = 1;
+  required ObjectData data = 2;
+}
+
+message InfoError {
+  required InfoType type = 1;
+  required string reason = 2;
+}
+
+message Ping {
+}
+
+// vim: ft=cpp ts=2 sw=2 expandtab

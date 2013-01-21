@@ -1,0 +1,59 @@
+option java_package = "pl.nask.hsn2.protobuff";
+import "Service.proto";
+
+enum JobStatus {
+  ACCEPTED    = 1;  // initial state 
+  STARTING    = 2;  // set-up phase
+  PROCESSING  = 3;  // processing in the system
+  COMPLETED   = 4;  // completed successfully
+  FAILING     = 5;  // fatal error (start shutdown)
+  FAILED      = 6;  //             (finished)
+  CANCELLING  = 7;  // stopped administratively (start shutdown)
+  CANCELLED   = 8;  //                          (finished)
+}
+
+message JobListRequest {
+}
+
+message JobInfo {
+  required uint64 id = 1;
+  required JobStatus status = 2;
+}
+
+message JobListReply {
+  repeated JobInfo jobs = 1;
+}
+
+message JobDescriptor {
+  required string workflow = 1; // name of the workflow
+  repeated ServiceConfig config = 2;
+  optional string version = 3; // specific version/revision of the workflow
+}
+
+message JobAccepted {
+  required uint64 job = 1;
+}
+
+message JobRejected {
+  optional string reason = 1;
+}
+
+message JobStarted {
+  required uint64 job = 1;
+}
+
+message JobFinished {
+  required uint64 job = 1;
+  required JobStatus status = 2;
+}
+
+message JobCancelRequest {
+  required uint64 job = 1;
+}
+
+message JobCancelReply {
+  required bool cancelled = 1;
+  optional string reason = 2; // used if request failed
+}
+
+// vim: ft=cpp ts=2 sw=2 expandtab
