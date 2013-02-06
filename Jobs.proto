@@ -49,8 +49,8 @@ message JobFinished {
 
 message JobFinishedReminder {
   required uint64 job = 1;
-  required JobStatus status = 2;
-  optional string offending_service = 3;
+  optional JobStatus status = 2;
+  optional uint64 offending_task = 3;
 }
 
 message JobCancelRequest {
