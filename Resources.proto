@@ -95,6 +95,7 @@ message JSContextResults {
   repeated string malicious_keywords = 3;
   repeated string suspicious_keywords = 4;
   required bool whitelisted = 5;
+  required string hash = 6;
 }
 
 message BehaviorsList {
@@ -140,4 +141,3 @@ message SingleCheckerVerdict {
   required string name = 1;
   required string verdict = 2;
 }
-
